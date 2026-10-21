@@ -179,7 +179,7 @@ function DIA(c){const cols=P[sp].cols,dd=(c.d&&c.d[sp])||{},cells=[];let full=0,
  let ds=DAY;if(!ds){ds=1;for(let d=30;d>=1;d--)if(cols.some(x=>dd[d+x[0]])){ds=d;break}}
  const t0=c.ini?new Date(c.ini+"T00:00").getTime():0,dt=t0?fmtD(t0+(ds-1)*864e5):"";
  return `<div class="pane noprint"><div class="inf"><span>📝 Cadastro: <b>${c.cad?fmtD(c.cad):"–"}</b></span><span>⏱️ Última atividade: <b>${ago(c.upd)}</b></span><span>✅ <b>${full}/30</b> dias completos · <b>${Math.round(tot/(30*cols.length)*100)}%</b> do protocolo</span></div><div class="dg">${cells.join("")}</div><div class="inf" style="flex-direction:row;gap:12px;margin-bottom:10px"><span>⬜ nada</span><span>🟨 parcial</span><span>🟩 completo</span></div><div class="dd"><h3>Dia ${ds}${dt?" · "+wdOf(c,ds)+" "+dt:""}</h3><ul>${cols.map(x=>`<li class="${dd[ds+x[0]]?"y":"n"}">${dd[ds+x[0]]?"✔":"✖"} ${esc(tileLabel(x))}</li>`).join("")}</ul></div></div>`}
-const tid=c=>c.uid||tid(c);
+const tid=c=>c.uid||c._id;
 const dkey=()=>tid(CL[sel])+"|"+sp+sw;
 function curNote(){const c=CL[sel],k=dkey();return DR[k]!==undefined?DR[k]:((NOTES[tid(c)]||{})[sp+sw]||"")}
 async function loadPh(){const c=CL[sel],k=dkey();if(PH[k]!==undefined)return;try{const d=await window.DB.collection("fotos/"+tid(c)+"/w").doc(sp+sw).get();PH[k]=d.exists?(d.data().imgs||[]):[]}catch(e){PH[k]=[]}}
